@@ -20,7 +20,7 @@ function Home() {
         <div className="tags">
             <div className="w3-animate-zoom">
                 <ul className="cloud">
-                    <li data-weight="1">Logical-Mathematical</li>
+                    <li data-weight="5">Logical-Mathematical</li>
                 </ul>
                 <ul className="cloud tags-1">
                     <li data-weight="1">Linguistic Intelligence</li>
@@ -37,7 +37,7 @@ function Home() {
                 </ul>
                 <ul className="cloud tags-4">
                     <li data-weight="3">Visual-Spatial</li>
-                    <li data-weight="2">Interpersonal</li>
+                    <li data-weight="4">Interpersonal</li>
                 </ul>
             </div>
             <div className="code">

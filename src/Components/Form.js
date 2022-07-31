@@ -41,7 +41,7 @@ function Form() {
     },[verification])
 
     async function EmailVerification(email, userName){
-        const response = await axios.post(host, {email: email, name: userName}, { headers :{
+        const response = await axios.post(host+"api/verify/user", {email: email, name: userName}, { headers :{
             token: process.env.REACT_APP_TOKEN
         }}).catch((err) => { console.error(err);   });
         return response.data.verificationCode

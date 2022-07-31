@@ -84,7 +84,7 @@ ul{
     margin-top: 3rem;
 }
 .cloud{
-    
+    font-family: "Times New Roman" !important;
     padding-left: 0;
     display: flex;
     flex-wrap: wrap;
