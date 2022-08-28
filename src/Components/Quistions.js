@@ -2,16 +2,15 @@ import React, { useEffect } from "react";
 import { useGlobalContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 
-import { GrChapterNext } from "react-icons/gr";
+import { GrChapterNext,GrChapterPrevious } from "react-icons/gr";
 
 
 function Quistions() {
-    const {questions,code,index, nextQuestion,ansrSub1,submitAnswer,isActive,finalSection,answers} = useGlobalContext()
+    const {questions,code,index, nextQuestion,previousQuestion,ansrSub1,submitAnswer,isActive,finalSection,answers} = useGlobalContext()
     
     const navigate = useNavigate()
 
     useEffect(() => {
-
          if(!code || localStorage.getItem("user") == null){
              navigate('/')
          }
@@ -19,6 +18,12 @@ function Quistions() {
             navigate('/final')    
        }
     })
+    
+    // useEffect(() => {
+    //     if(finalSection){    
+    //         navigate('/final')    
+    //    }
+    // }, [finalSection])
     
     const emptyAlert = () => {
         return alert("Make a choose!")
@@ -53,11 +58,14 @@ function Quistions() {
                     </div>
                         :
                         <div className="q-button">
-                            {/* <button className="prev-button" onClick={previousQuestion}>
-                            <GrChapterPrevious /> Previous{" "}
-                    </button> */}
+                            {index > 0?
+                            <button className="prev-button" onClick={previousQuestion}>
+                                <GrChapterPrevious /> Previous{" "}
+                            </button>
+                            : ""
+                            }
                             <button className="next-button" onClick={isActive? nextQuestion: emptyAlert}>
-                                <GrChapterNext /> Next
+                                Next <GrChapterNext />
                             </button>
                         </div>
                     }

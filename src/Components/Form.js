@@ -11,6 +11,7 @@ function Form() {
     const [genCode, setNewCode]= useState(undefined);
     const [verification, setCheckverification] = useState("");
     const [message, setMessage] = useState("")
+    const [countrycode, setCountryCode]=useState([])
 
     useEffect(() => {
          //If no code then go back to home
@@ -18,13 +19,15 @@ function Form() {
         if(code === ""){
           navigate("/");
         }
+        axios.get("https://miassessment.s3.ap-south-1.amazonaws.com/static/allcontrytel.json")
+        .then((res)=>{
+            setCountryCode(res.data)
+        })
       },[])
 
     useEffect(() => {
-        //console.log(localStorage.getItem('user'))
         if(localStorage.getItem('user')!= null && verified)
         {
-            console.log("Cached")
             navigate("/quiz");
         }
     }, [verified])
@@ -58,7 +61,7 @@ function Form() {
         }
         else
         {
-            console.log(verified)
+            //console.log(verified)
             navigate("/quiz");
         }  
     }
@@ -70,7 +73,7 @@ function Form() {
         return
     }
     return (
-        <div className="container p-5">
+        <div className="container px-5">
             { !genCode ?
                 <form onSubmit={verifyEmail}>
                 <h2 className="form-title">Registration</h2>
@@ -86,7 +89,6 @@ function Form() {
                             onChange={handleChange}
                             placeholder="Enter Your Name"
                             required/>
-                        {/* <p className="form-error">{formError.firstname}</p> */}
                     </div>
                     <div className="col-lg-4 p-3">
                         <label className="form-detials">Last Name</label><span className="text-danger">*</span>
@@ -99,7 +101,6 @@ function Form() {
                             onChange={handleChange}
                             placeholder="Enter Your Name"
                             required/>
-                        {/* <p className="form-error">{formError.lastname}</p> */}
                     </div>
                     <div className="col-lg-4 p-3">
                         <label className="form-detials">Type</label><span className="text-danger">*</span>
@@ -123,7 +124,7 @@ function Form() {
                         required/>
                     </div>
                     <div className="col-lg-4 p-3">
-                        <label className="form-detials">Class/Designation</label><span className="text-danger">*</span>
+                        <label className="form-detials">Designation/Class/Course</label><span className="text-danger">*</span>
                         <input
                             className="form-control"
                             type="text"
@@ -131,13 +132,12 @@ function Form() {
                             id="level"
                             value={forms.level}
                             onChange={handleChange}
-                            placeholder="Designation/Class/Grade"
+                            placeholder="Designation/Class/Grade/Major"
                         required/>
                     </div>
                     <div className="col-lg-4 p-3">
                         <label className="form-detials">Age</label><span className="text-danger">*</span>
                         <input className="form-control" type="number" name="age" id="age" min={10} value={forms.age} onChange={handleChange} placeholder="Age" required/>
-                        {/* <p className="form-error">{formError.age}</p> */}
                     </div>
                 </div>
                 <div className="row">
@@ -164,11 +164,32 @@ function Form() {
                             id="phone"
                             value={forms.phone}
                             onChange={handleChange}
-                            placeholder="+91 9000000000"
+                            placeholder="Enter phone number"
                             title="+91 9000000000"
                             required/>
-                        {/* <p className="form-error">{formError.phone}</p> */}
                     </div>
+                    <div className="col-lg-4 p-3">
+                    <label className="form-detials">Whats App</label><span className="text-danger">*</span>
+                        <div className="input-group mb-3">
+                        <select className="form-select" name="countrycode" onChange={handleChange} defaultValue={countrycode["India"]} >
+                            {Object.keys(countrycode).map((country,index) => 
+                                <option key={index} className="dropdown-item" href="#">{countrycode[country]}</option>
+                            )}
+                        </select>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="whatsapp"
+                            id="whatsapp"
+                            value={forms.whatsapp}
+                            onChange={handleChange}
+                            placeholder="Whats App Number"
+                            title="+91 9000000000"
+                            required/>
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
                     <div className="col-lg-4 p-3">
                         <label className="form-detials">Country</label><span className="text-danger">*</span>
                         <select className="form-control" name="country" id="country" value={forms.country} onChange={handleChange} required>
@@ -181,35 +202,32 @@ function Form() {
                                 })}
                         </select>
                     </div>
-                </div>
-                <div className="row">
                     <div className="col-lg-4 p-3">
                         <label className="form-detials">Langauge Preference</label><span className="text-danger">*</span>
                         <select className="form-control" name="language" id="language" value={forms.language} onChange={handleChange}>
-                            <option value="English">English </option>
+                            <option value="english">English</option>
+                            <option value="malayalam">Malayalam</option>
                         </select>
-                    </div>
-                    <div className="col-lg-4 p-3">
-                        <div className="gender-detilas">
-                        <input className="form-control" type="radio" name="gender" value='male' checked={forms.gender === 'male'} onChange={handleChange} id="dot-1"/>
-                        <input className="form-control" type="radio" name="gender" value='female' checked={forms.gender === 'female'} onChange={handleChange} id="dot-2" />
-                        <input className="form-control" type="radio" name="gender" value='others' checked={forms.gender === 'others'} onChange={handleChange} id="dot-3" />
-                        <span className="gender-title">Gender</span><span className="text-danger">*</span>
-                        <div className="gender-category">
-                        <label htmlFor="dot-1">
-                            <span className="dot one"></span>
-                            <span className="gender">Male</span>
-                        </label>
-                        <label htmlFor="dot-2">
-                            <span className="dot two"></span>
-                            <span className="gender">Female</span>
-                        </label>
-                        <label htmlFor="dot-3">
-                            <span className="dot three"></span>
-                            <span className="gender">Others</span>
-                        </label>
-                    </div>
-                    </div>
+                        <div className="gender-detilas my-2">
+                            <input className="form-control" type="radio" name="gender" value='male' checked={forms.gender === 'male'} onChange={handleChange} id="dot-1"/>
+                            <input className="form-control" type="radio" name="gender" value='female' checked={forms.gender === 'female'} onChange={handleChange} id="dot-2" />
+                            <input className="form-control" type="radio" name="gender" value='others' checked={forms.gender === 'others'} onChange={handleChange} id="dot-3" />
+                            <span className="gender-title">Gender</span><span className="text-danger">*</span>
+                            <div className="gender-category">
+                                <label htmlFor="dot-1">
+                                    <span className="dot one"></span>
+                                    <span className="gender">Male</span>
+                                </label>
+                                <label htmlFor="dot-2">
+                                    <span className="dot two"></span>
+                                    <span className="gender">Female</span>
+                                </label>
+                                <label htmlFor="dot-3">
+                                    <span className="dot three"></span>
+                                    <span className="gender">Others</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div className="col-lg-4 p-3">
                         <label className="form-detials">Address</label><span className="text-danger">*</span>

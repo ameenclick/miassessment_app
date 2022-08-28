@@ -28,7 +28,7 @@ function Home() {
                     <li data-weight="3">Existential</li>
                 </ul>
                 <ul className="cloud tags-2">
-                    <li data-weight="10">Multiple Intelligence Assessment</li>
+                    <li data-weight="10">Multiple   Intelligence   Assessment</li>
                 </ul>
                 <ul className="cloud">
                     <li data-weight="3">Musical</li>

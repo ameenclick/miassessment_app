@@ -43,7 +43,7 @@ function Final() {
   return (
     <div className='final'>
         <div className="f-heading">
-            <h1>welldone! you completed your M I assessment</h1>
+            <h1>well done! you completed your M I assessment</h1>
         </div>
         {report? 
         <div align="center" className='my-4'>
@@ -51,10 +51,10 @@ function Final() {
          </div>    :
         <h3 className='text-center'>Report will be ready in {counter} sec</h3>
         }
-        {!done?
+        {done?
             <div className="f-mail">
                 <div className='f-left'></div>
-                <p>You will also recieve the report in email <GrMailOption /></p>
+                <p>You will also recieve the report in email <GrMailOption />.<br/> If not, you can enter your code again in landing page to download report without taking the test again.</p>
             </div>
             :
             ""

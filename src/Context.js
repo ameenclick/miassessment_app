@@ -6,10 +6,10 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
     /*Home*/
-    const host = process.env.REACT_APP_AWS_HOST
+    const host = process.env.REACT_APP_HOST
     const [code, setCode] = useState("");
     const [nextSection,setNextSection] = useState(false)
-    const questionsUrl = `${host}api/quiz/english/`;
+    const questionsUrl = `${host}api/quiz/`;
 
     /*Quiz*/
     const [questions, setQuestions] = useState([]);
@@ -40,6 +40,8 @@ const AppProvider = ({ children }) => {
         address: "",
         gender: "",
         level: "",
+        countrycode: "IND - +91",
+        whatsapp: ""
     });
 
     useEffect(() => {
@@ -68,14 +70,15 @@ const AppProvider = ({ children }) => {
           if(forms.age < 13)
           {
               //console.log("Junior",forms.age)
-              fetchQuestions(questionsUrl+"junior");
+              fetchQuestions(`${questionsUrl}${forms.language}/junior`);
           }
           else
           {
               //console.log("Senior",forms.age)
-              fetchQuestions(questionsUrl+"senior");
+              fetchQuestions(`${questionsUrl}${forms.language}/senior`);
           }
         }
+        // console.log(forms.countrycode)
     }, [forms])
 
     const [modelSection,setModelSection] = useState(false)
@@ -142,28 +145,19 @@ const AppProvider = ({ children }) => {
       setIsActive(e.target.value)
   }
 
+
+
   //Store the option when user moves to next
     const nextQuestion = async () => {
         if(answers.length === questions.length) return
-        if(index === answers.length-1)
+        if(index === answers.length)
         {
           const savedOptions = localStorage.getItem('answers')
-          var savedDetials = savedOptions ? JSON.parse(savedOptions):[]
-          savedDetials[index]=options
-          localStorage.setItem('answers',JSON.stringify([...savedDetials]) );
-          var temp=[...answers,]
-          temp[index]=options.choice;
-          setAnswers(temp)
-        }
-        else
-        {
-          const savedOptions = localStorage.getItem('answers')
-          const savedDetials = savedOptions ? JSON.parse(savedOptions):[]
-          localStorage.setItem('answers',JSON.stringify([...savedDetials,options]) );   
+          const savedDetails = savedOptions ? JSON.parse(savedOptions):[]
+          localStorage.setItem('answers',JSON.stringify([...savedDetails,options]) );   
           setAnswers((prev)=>[...prev,options.choice])
         }
         if(index !== questions.length-1) setIsActive("")
-        console.log(index,answers.length)
         setIndex((oldIndex) => {
           const index = oldIndex + 1;
           if (index > questions.length - 1) {            
@@ -174,10 +168,21 @@ const AppProvider = ({ children }) => {
       });
     };
 
+    //Updating all changes to localstorage
     useEffect(() => {
        if(answers.length>0) localStorage.setItem('choice',JSON.stringify(answers))
+       //console.log(answers)
      }, [answers])
 
+    //Changing the option with previous button
+    useEffect(() => {
+      if(index<answers.length)
+      {
+        setIsActive(answers[index])
+      }
+    }, [index])
+
+    //Previous Button On Click Funtion
     const previousQuestion = () => {
         setIndex((oldIndex) => {
             const index = oldIndex - 1;
@@ -189,6 +194,19 @@ const AppProvider = ({ children }) => {
         });
     };
 
+    //Update the response have manipulated in between the quiz
+    useEffect(() => {
+      if(index<answers.length){
+          const savedOptions = localStorage.getItem('answers')
+          var savedDetails = savedOptions ? JSON.parse(savedOptions):[]
+          savedDetails[index]=options
+          localStorage.setItem('answers',JSON.stringify([...savedDetails]) );
+          var temp=[...answers,]
+          temp[index]=options.choice;
+          setAnswers(temp)
+      }
+    }, [options])
+
     const submitAnswer =async (e)=>{
         e.preventDefault()
         console.log(answers.length)
@@ -199,14 +217,13 @@ const AppProvider = ({ children }) => {
         {
             userResponse.push({"No": i+1, "Choice": answers[i]})
         }
-        console.log(userResponse.length)
         var data = JSON.stringify({ "userCode":code,
                 "userResponse": userResponse})
         const headers= { 
             'token': process.env.REACT_APP_TOKEN, 
             'Content-Type': 'application/json'
           };
-        
+          console.log(userResponse.length)
         axios.post(`${host}api/quiz/process/`,data, {headers: headers})
         .then(function (response) {
           console.log(response.data);
@@ -234,16 +251,17 @@ const AppProvider = ({ children }) => {
         var details = JSON.stringify({
             "userCode": code,
             "name": `${await capitalizeFirstLetter(forms.firstname)} ${await capitalizeFirstLetter(forms.lastname)}`,
-            "type": forms.type,
+            "type": capitalizeFirstLetter(forms.type),
             "organisation": capitalizeFirstLetter(forms.organization),
             "level": forms.level,
             "age": forms.age,
-            "gender": forms.gender,
-            "languagePreference": forms.language,
+            "gender": capitalizeFirstLetter(forms.gender),
+            "languagePreference": capitalizeFirstLetter(forms.language),
             "address": capitalizeFirstLetter(forms.address),
             "email": forms.email,
             "phone": forms.phone,
-            "country": forms.country
+            "country": capitalizeFirstLetter(forms.country),
+            "whatsapp": forms.countrycode.split("-")[1]+forms.whatsapp
           });
           var  url= `${host}api/insert/user/details`
           var  headers= { 
@@ -252,8 +270,7 @@ const AppProvider = ({ children }) => {
             }
           
           try{
-            const res = await axios.post(url, details,{ headers: headers})
-            console.log(res.data);
+            await axios.post(url, details,{ headers: headers})
             setModelSection(true)
           } catch(error){
             console.log(error.response)
@@ -266,7 +283,6 @@ const AppProvider = ({ children }) => {
 
     const handleSubmit = () => {
        postForm()
-
     };
 
     return (
