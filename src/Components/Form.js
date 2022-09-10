@@ -15,7 +15,6 @@ function Form() {
 
     useEffect(() => {
          //If no code then go back to home
-         //console.log(verified)
         if(code === ""){
           navigate("/");
         }
@@ -61,7 +60,6 @@ function Form() {
         }
         else
         {
-            //console.log(verified)
             navigate("/quiz");
         }  
     }
@@ -151,7 +149,7 @@ function Form() {
                             value={forms.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                             title="Follow pattern: username@mailer.com, You will recive report in email."
                             required/>
                     </div>
@@ -171,11 +169,19 @@ function Form() {
                     <div className="col-lg-4 p-3">
                     <label className="form-detials">Whats App</label><span className="text-danger">*</span>
                         <div className="input-group mb-3">
-                        <select className="form-select" name="countrycode" onChange={handleChange} defaultValue={countrycode["India"]} >
+                        <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{forms.countrycode}</button>
+                        <ul className="dropdown-menu country-menu">
+                            {
+                                Object.keys(countrycode).map((country,i) => 
+                                    <li key={i}><button type="button" className="dropdown-item" href="#country" name="countrycode" onClick={handleChange} value={countrycode[country].split("-")[1]}>{country} - <span className='text-black-50'>{countrycode[country].split("-")[1]}</span></button></li>
+                                )
+                            }
+                        </ul>
+                        {/* <select className="form-select" name="countrycode" onChange={handleChange} defaultValue={countrycode["India"]} >
                             {Object.keys(countrycode).map((country,index) => 
                                 <option key={index} className="dropdown-item" href="#">{countrycode[country]}</option>
                             )}
-                        </select>
+                        </select> */}
                         <input
                             className="form-control"
                             type="text"

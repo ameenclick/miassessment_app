@@ -429,6 +429,15 @@ form input[type='radio']{
     }
 }
 
+.country-menu {
+    height: 200px;
+    overflow-y: scroll;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera
+.country-menu::-webkit-scrollbar {
+    display: none;
+} */
 
 /*final*/
 

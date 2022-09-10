@@ -43,7 +43,7 @@ function Final() {
   return (
     <div className='final'>
         <div className="f-heading">
-            <h1>well done! you completed your M I assessment</h1>
+            <h1>well done! you have completed your M I assessment</h1>
         </div>
         {report? 
         <div align="center" className='my-4'>

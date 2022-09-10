@@ -17,7 +17,7 @@ const AppProvider = ({ children }) => {
     const [error, setError] = useState(false);
     const [answers,setAnswers] = useState([])
     const [isActive,setIsActive] = useState("")
-    const [finalSection,setFinalSection] = useState(false)
+    const [finalSection,setFinalSection] = useState(true)
     const [done, setDone] = useState(false)
     const [verified, setVerfied] = useState(false);
     const [options, setOptions] = useState({
@@ -40,7 +40,7 @@ const AppProvider = ({ children }) => {
         address: "",
         gender: "",
         level: "",
-        countrycode: "IND - +91",
+        countrycode: "+91",
         whatsapp: ""
     });
 
@@ -258,7 +258,7 @@ const AppProvider = ({ children }) => {
             "gender": capitalizeFirstLetter(forms.gender),
             "languagePreference": capitalizeFirstLetter(forms.language),
             "address": capitalizeFirstLetter(forms.address),
-            "email": forms.email,
+            "email": forms.email.toLowerCase(),
             "phone": forms.phone,
             "country": capitalizeFirstLetter(forms.country),
             "whatsapp": forms.countrycode.split("-")[1]+forms.whatsapp
