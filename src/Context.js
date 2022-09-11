@@ -17,7 +17,7 @@ const AppProvider = ({ children }) => {
     const [error, setError] = useState(false);
     const [answers,setAnswers] = useState([])
     const [isActive,setIsActive] = useState("")
-    const [finalSection,setFinalSection] = useState(true)
+    const [finalSection,setFinalSection] = useState(false)
     const [done, setDone] = useState(false)
     const [verified, setVerfied] = useState(false);
     const [options, setOptions] = useState({

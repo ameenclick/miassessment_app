@@ -12,18 +12,13 @@ function Quistions() {
 
     useEffect(() => {
          if(!code || localStorage.getItem("user") == null){
-             navigate('/')
+            console.log(code)
+            navigate('/')
          }
-       if(finalSection){    
+       if(finalSection){  
             navigate('/final')    
        }
     })
-    
-    // useEffect(() => {
-    //     if(finalSection){    
-    //         navigate('/final')    
-    //    }
-    // }, [finalSection])
     
     const emptyAlert = () => {
         return alert("Make a choose!")
