@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 
 const AppContext = React.createContext();
 
@@ -207,6 +207,22 @@ const AppProvider = ({ children }) => {
       }
     }, [options])
 
+    //Limit the rate of execution of the funtion
+    const debounce = (func) => {
+      let timer;
+      return function (...args) {
+        const context = this;
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          timer = null;
+          func.apply(context, args);
+        }, 500);
+      };
+    };
+
+    //Avoid senting request again when double click
+    const optimizedSubmit = useCallback(debounce(submitAnswer), []);
+
     const submitAnswer =async (e)=>{
         e.preventDefault()
         console.log(answers.length)
@@ -287,7 +303,7 @@ const AppProvider = ({ children }) => {
 
     return (
         <AppContext.Provider
-            value={{ code,setCode,setError,codeSubmit,nextSection, questions, index, error, nextQuestion, previousQuestion,ansrSub1,isActive,submitAnswer,finalSection,  forms, handleChange, handleSubmit,modelSection, host,done,verified, setVerfied,answers }}
+            value={{ code,setCode,setError,codeSubmit,nextSection, questions, index, error, nextQuestion, previousQuestion,ansrSub1,isActive,optimizedSubmit,finalSection,  forms, handleChange, handleSubmit,modelSection, host,done,verified, setVerfied,answers }}
         >
             {children}
         </AppContext.Provider>
