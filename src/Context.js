@@ -69,12 +69,10 @@ const AppProvider = ({ children }) => {
         {
           if(forms.age < 13)
           {
-              //console.log("Junior",forms.age)
               fetchQuestions(`${questionsUrl}${forms.language}/junior`);
           }
           else
           {
-              //console.log("Senior",forms.age)
               fetchQuestions(`${questionsUrl}${forms.language}/senior`);
           }
         }

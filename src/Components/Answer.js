@@ -2,7 +2,7 @@ import React from 'react'
 import { useGlobalContext } from "../Context";
 
 function Answer() {
-    const {questions,index} =useGlobalContext
+    const {questions,index} = useGlobalContext
   return (
     <div>
         <ul>
