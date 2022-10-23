@@ -58,6 +58,9 @@ function Home() {
                     <p className="code-error">Code invalid!!</p>
                 </div>
             )}
+            <div className="text-dark text-center mt-4">
+                <p>Are you looking for consultation audio? <a href="/audio">Click Here</a></p>
+            </div>
         </div>
     );
 }

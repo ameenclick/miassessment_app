@@ -219,8 +219,6 @@ const AppProvider = ({ children }) => {
     };
 
     //Avoid senting request again when double click
-    const optimizedSubmit = useCallback(debounce(submitAnswer), []);
-
     const submitAnswer =async (e)=>{
         e.preventDefault()
         console.log(answers.length)
@@ -249,6 +247,8 @@ const AppProvider = ({ children }) => {
         });
         
     }
+
+    const optimizedSubmit = useCallback(debounce(submitAnswer), []);
 
     /*form*/
     const handleChange = (e) => {
