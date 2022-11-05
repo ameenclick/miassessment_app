@@ -69,12 +69,10 @@ const AppProvider = ({ children }) => {
         {
           if(forms.age < 13)
           {
-              //console.log("Junior",forms.age)
               fetchQuestions(`${questionsUrl}${forms.language}/junior`);
           }
           else
           {
-              //console.log("Senior",forms.age)
               fetchQuestions(`${questionsUrl}${forms.language}/senior`);
           }
         }
@@ -221,8 +219,6 @@ const AppProvider = ({ children }) => {
     };
 
     //Avoid senting request again when double click
-    const optimizedSubmit = useCallback(debounce(submitAnswer), []);
-
     const submitAnswer =async (e)=>{
         e.preventDefault()
         console.log(answers.length)
@@ -251,6 +247,8 @@ const AppProvider = ({ children }) => {
         });
         
     }
+
+    const optimizedSubmit = useCallback(debounce(submitAnswer), []);
 
     /*form*/
     const handleChange = (e) => {

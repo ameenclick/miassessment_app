@@ -213,6 +213,8 @@ function Form() {
                         <select className="form-control" name="language" id="language" value={forms.language} onChange={handleChange}>
                             <option value="english">English</option>
                             <option value="malayalam">Malayalam</option>
+                            <option value="malayalam">Kannada</option>
+                            <option value="malayalam">Arabic</option>
                         </select>
                         <div className="gender-detilas my-2">
                             <input className="form-control" type="radio" name="gender" value='male' checked={forms.gender === 'male'} onChange={handleChange} id="dot-1"/>
