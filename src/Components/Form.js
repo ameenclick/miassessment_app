@@ -65,6 +65,10 @@ function Form() {
     }
 
     const verificationFailed = () => {
+        if(!forms.gender){
+            alert("Choose a gender");
+            return
+        }
         setMessage("Incorrect code ,Try gain...");
         setVerfied(false);
         alert("Verification failed...");
@@ -177,11 +181,6 @@ function Form() {
                                 )
                             }
                         </ul>
-                        {/* <select className="form-select" name="countrycode" onChange={handleChange} defaultValue={countrycode["India"]} >
-                            {Object.keys(countrycode).map((country,index) => 
-                                <option key={index} className="dropdown-item" href="#">{countrycode[country]}</option>
-                            )}
-                        </select> */}
                         <input
                             className="form-control"
                             type="text"
@@ -209,15 +208,16 @@ function Form() {
                         </select>
                     </div>
                     <div className="col-lg-4 p-3">
-                        <label className="form-detials">Langauge Preference</label><span className="text-danger">*</span>
-                        <select className="form-control" name="language" id="language" value={forms.language} onChange={handleChange}>
+                        <label className="form-detials">Quiz Langauge</label><span className="text-danger">*</span>
+                        <select className="form-control" name="language" id="language" value={forms.language} onChange={handleChange} required>
+                            <option value={""} selected>Choose a language</option>
                             <option value="english">English</option>
                             <option value="malayalam">Malayalam</option>
                             <option value="malayalam">Kannada</option>
                             <option value="malayalam">Arabic</option>
                         </select>
                         <div className="gender-detilas my-2">
-                            <input className="form-control" type="radio" name="gender" value='male' checked={forms.gender === 'male'} onChange={handleChange} id="dot-1"/>
+                            <input className="form-control" type="radio" name="gender" value='male' checked={forms.gender === 'male'} onChange={handleChange} title="Choose Gender" id="dot-1" required/>
                             <input className="form-control" type="radio" name="gender" value='female' checked={forms.gender === 'female'} onChange={handleChange} id="dot-2" />
                             <input className="form-control" type="radio" name="gender" value='others' checked={forms.gender === 'others'} onChange={handleChange} id="dot-3" />
                             <span className="gender-title">Gender</span><span className="text-danger">*</span>
