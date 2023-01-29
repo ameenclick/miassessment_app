@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect, useCallback, useRef } from "react";
 
 const AppContext = React.createContext();
 
@@ -24,6 +24,9 @@ const AppProvider = ({ children }) => {
       id:'',
       choice:''
   })
+    //Inorder to submit the quiz with debouceing and callback.(State can't access)
+    const answerRef=useRef();
+    const codeRef=useRef();
    
   
     /*Form*/
@@ -47,7 +50,7 @@ const AppProvider = ({ children }) => {
     useEffect(() => {
       //localStorage.clear();
       if(localStorage.getItem("user") != null)  setForms(JSON.parse(localStorage.getItem("user")))
-      setCode(localStorage.getItem("userCode")!=null?localStorage.getItem("userCode"):"")
+      // setCode(localStorage.getItem("userCode")!=null?localStorage.getItem("userCode"):"")
       var quizResponse = localStorage.getItem('answers') != null?JSON.parse(localStorage.getItem('answers')):localStorage.getItem('answers');
       if(quizResponse != null)
       {
@@ -64,6 +67,14 @@ const AppProvider = ({ children }) => {
       }
   }, []);
 
+  //Code set for reference
+    useEffect(() => {
+      if(code)
+      {
+        codeRef.current=code
+      }
+    }, [code])
+
     useEffect(() => {
         if(forms.age)
         {
@@ -76,7 +87,6 @@ const AppProvider = ({ children }) => {
               fetchQuestions(`${questionsUrl}${forms.language}/senior`);
           }
         }
-        // console.log(forms.countrycode)
     }, [forms])
 
     const [modelSection,setModelSection] = useState(false)
@@ -169,7 +179,7 @@ const AppProvider = ({ children }) => {
     //Updating all changes to localstorage
     useEffect(() => {
        if(answers.length>0) localStorage.setItem('choice',JSON.stringify(answers))
-       //console.log(answers)
+       answerRef.current=[...answers]
      }, [answers])
 
     //Changing the option with previous button
@@ -219,17 +229,14 @@ const AppProvider = ({ children }) => {
     };
 
     //Avoid senting request again when double click
-    const submitAnswer =async (e)=>{
+    const submitAnswer = (e)=>{
         e.preventDefault()
-        console.log(answers.length)
-        await nextQuestion();
-        console.log(answers.length)
         const userResponse = []
-        for( var i = 0 ; i < answers.length; i++ )
+        for( var i = 0 ; i < answerRef.current.length; i++ )
         {
-            userResponse.push({"No": i+1, "Choice": answers[i]})
+            userResponse.push({"No": i+1, "Choice": answerRef.current[i]})
         }
-        var data = JSON.stringify({ "userCode":code,
+        var data = JSON.stringify({ "userCode":codeRef.current,
                 "userResponse": userResponse})
         const headers= { 
             'token': process.env.REACT_APP_TOKEN, 
@@ -248,8 +255,7 @@ const AppProvider = ({ children }) => {
         
     }
 
-    const optimizedSubmit = useCallback(debounce(submitAnswer), []);
-
+    const optimizedSubmit = useCallback(debounce(submitAnswer),[])
     /*form*/
     const handleChange = (e) => {
         const name = e.target.name;
