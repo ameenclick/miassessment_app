@@ -208,7 +208,7 @@ function Form() {
                         </select>
                     </div>
                     <div className="col-lg-4 p-3">
-                        <label className="form-detials">Quiz Langauge</label><span className="text-danger">*</span>
+                        <label className="form-detials">Assessment Langauge</label><span className="text-danger">*</span>
                         <select className="form-control" name="language" id="language" value={forms.language} onChange={handleChange} required>
                             <option value={""} selected>Choose a language</option>
                             <option value="english">English</option>
