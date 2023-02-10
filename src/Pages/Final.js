@@ -12,7 +12,7 @@ function Final() {
     const [counter, setCounter] = useState(60)
 
     useEffect(() => {
-        if(code)
+        if(!code)
         {
              navigate("/")
         }
