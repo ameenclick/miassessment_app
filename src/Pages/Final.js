@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 import {GrLinkBottom, GrMailOption} from "react-icons/gr"
+import {BsGear} from "react-icons/bs"
 import axios from 'axios';
 
 function Final() {
     const navigate = useNavigate()
     const {host,code,done} = useGlobalContext()
     const [report, setReport]= useState(false)
-    const [counter, setCounter] = useState(done?5:60)
+    const [counter, setCounter] = useState(60)
 
     useEffect(() => {
-        if(!code)
+        if(code)
         {
              navigate("/")
         }
@@ -47,10 +48,11 @@ function Final() {
         </div>
         {report? 
         <div align="center" className='my-4'>
-            <a className='btn btn-info' rel="noopener noreferrer" target="_blank" href={host+"report/"+code}> <GrLinkBottom /> report</a>
+            <a className='btn btn-info' rel="noopener noreferrer" target="_blank" href={host+"report/"+code}> <GrLinkBottom /> Report</a>
          </div>    :
-        <h3 className='text-center'>Report will be ready in {counter} sec</h3>
+        <h3 className='text-center'><div class="spinner-border border-0" role="status"><BsGear  /></div> Report is generating...</h3>
         }
+        {counter<=30?<h4 className='text-center text-warning'>It may take few minutes.</h4>:""}
         {done?
             <div className="f-mail">
                 <div className='f-left'></div>
