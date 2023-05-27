@@ -80,7 +80,7 @@ function Form() {
                 <form onSubmit={verifyEmail}>
                 <h2 className="form-title">Registration</h2>
                 <div className="row">
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">First Name</label><span className="text-danger">*</span>
                         <input
                             className="form-control"
@@ -92,7 +92,7 @@ function Form() {
                             placeholder="Enter Your Name"
                             required/>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Last Name</label><span className="text-danger">*</span>
                         <input
                             className="form-control"
@@ -104,7 +104,7 @@ function Form() {
                             placeholder="Enter Your Name"
                             required/>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Type</label><span className="text-danger">*</span>
                         <select className="form-control" name="type" id="type" value={forms.type} onChange={handleChange}>
                             <option value="student">Student</option>
@@ -113,7 +113,7 @@ function Form() {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Organization</label><span className="text-danger">*</span>
                         <input
                             className="form-control"
@@ -125,7 +125,7 @@ function Form() {
                             placeholder="Institution/Organization"
                         required/>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Designation/Class/Course</label><span className="text-danger">*</span>
                         <input
                             className="form-control"
@@ -137,13 +137,13 @@ function Form() {
                             placeholder="Designation/Class/Grade/Major"
                         required/>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Age</label><span className="text-danger">*</span>
                         <input className="form-control" type="number" name="age" id="age" min={10} value={forms.age} onChange={handleChange} placeholder="Age" required/>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Email</label><span className="text-danger">*</span>
                         <input
                             className="form-control"
@@ -157,7 +157,7 @@ function Form() {
                             title="Follow pattern: username@mailer.com, You will recive report in email."
                             required/>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Phone</label><span className="text-danger">*</span>
                         <input
                             className="form-control"
@@ -170,7 +170,7 @@ function Form() {
                             title="+91 9000000000"
                             required/>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                     <label className="form-detials">Whats App</label><span className="text-danger">*</span>
                         <div className="input-group mb-3">
                         <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{forms.countrycode}</button>
@@ -195,7 +195,7 @@ function Form() {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Country</label><span className="text-danger">*</span>
                         <select className="form-control" name="country" id="country" value={forms.country} onChange={handleChange} required>
                                 {countries.map((item) => {
@@ -207,7 +207,7 @@ function Form() {
                                 })}
                         </select>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Assessment Langauge</label><span className="text-danger">*</span>
                         <select className="form-control" name="language" id="language" value={forms.language} onChange={handleChange} required>
                             <option value={""} selected>Choose a language</option>
@@ -237,9 +237,34 @@ function Form() {
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-4 p-3">
+                    <div className="col-lg-4 p-2">
                         <label className="form-detials">Address</label><span className="text-danger">*</span>
                         <textarea className="form-control" name="address" id="address" onChange={handleChange} defaultValue={forms.address} placeholder="Enter Address"  rows="3" required></textarea>  
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-lg-4 p-2">
+                        <label className="form-detials">
+                            Current Courses &nbsp;
+                        </label><span className="text-danger">*</span>
+                        <input className="form-control" name="course_studing" id="studing" 
+                        onChange={handleChange} defaultValue={forms.course_studing} 
+                        placeholder="Eg: Phyiscs,Chemistry,Maths,Engineering" 
+                        title="If you have opted many subjects, please mention a few of them. 
+                        If you are a student now write the Subject(s) in the present class/course.
+                        If you have completed your studies write the Subject(s) in the last class/course  of your study"
+                        required/>
+                        <p style={{fontSize: 12}}>Tell us about your current study or the last course you have completed.</p>
+                    </div>
+                    <div className="col-lg-4 p-2">
+                        <label className="form-detials">Aspired Courses</label><span className="text-danger">*</span>
+                        <input className="form-control" 
+                                name="course_aspiration" id="studing" 
+                                onChange={handleChange} defaultValue={forms.course_aspiration} 
+                                placeholder="Fill your aspiration" 
+                                title="Write the name of the courses or careers which you would like to take in the future (This will help us to provide you with the right information about your dream course/career)"
+                                required/>
+                        <p style={{fontSize: 12}}>Tell us about your future plans of studies / career.</p>
                     </div>
                 </div>
                 <div className="row justify-content-center">
@@ -251,7 +276,7 @@ function Form() {
                 :
                 <form className="row justify-content-center text-center needs-validation">
                     <div className="col-lg-6 align-self-center">
-                        <div className="card m-5 p-3 justify-content-center w3-animate-right">
+                        <div className="card m-5 p-2 justify-content-center w3-animate-right">
                             <div className="card-header">
                                 <h2><span onClick={() => setNewCode("")}>
                                   <GrRevert />
