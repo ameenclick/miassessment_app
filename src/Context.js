@@ -44,7 +44,9 @@ const AppProvider = ({ children }) => {
         gender: "",
         level: "",
         countrycode: "+91",
-        whatsapp: ""
+        whatsapp: "",
+        course_studing: "",
+        course_aspiration: ""
     });
 
     useEffect(() => {
@@ -281,7 +283,9 @@ const AppProvider = ({ children }) => {
             "email": forms.email.toLowerCase(),
             "phone": forms.phone,
             "country": capitalizeFirstLetter(forms.country),
-            "whatsapp": forms.countrycode.split("-")[1]+forms.whatsapp
+            "whatsapp": forms.countrycode+forms.whatsapp,
+            "course_studing": forms.course_studing,
+            "course_aspiration": forms.course_aspiration
           });
           var  url= `${host}api/insert/user/details`
           var  headers= { 
