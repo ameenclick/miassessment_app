@@ -18,6 +18,7 @@ function Form() {
         if(code === ""){
           navigate("/");
         }
+        //API to access the contry codes for telephone number
         axios.get("https://miassessment.s3.ap-south-1.amazonaws.com/static/allcontrytel.json")
         .then((res)=>{
             setCountryCode(res.data)
@@ -31,6 +32,7 @@ function Form() {
         }
     }, [verified])
 
+    //Checking the verification code to proceed when ever value changes
     useEffect(() => {
         if(Number(verification) === genCode)
         {
@@ -42,13 +44,19 @@ function Form() {
         else if(verification.length === 4)  verificationFailed();
     },[verification])
 
+    //Making API call to create and send a otp to verfy email
     async function EmailVerification(email, userName){
         const response = await axios.post(host+"api/verify/user", {email: email, name: userName}, { headers :{
             token: process.env.REACT_APP_TOKEN
-        }}).catch((err) => { console.error(err);   });
-        return response.data.verificationCode
+        }});
+        if(response.status == 200) return response.data.verificationCode
+        else{
+            setMessage("Something went wrong ,Try gain...");
+            setVerfied(false);
+        }
     }
 
+    //Verifying email based on user input otp recived with server created
     const verifyEmail = async (e) => {
         e.preventDefault();
         localStorage.setItem("user",JSON.stringify(forms));
@@ -64,6 +72,7 @@ function Form() {
         }  
     }
 
+    //Funtion to make failed changes in UI if wrong OTP is entered
     const verificationFailed = () => {
         if(!forms.gender){
             alert("Choose a gender");
@@ -74,6 +83,7 @@ function Form() {
         alert("Verification failed...");
         return
     }
+    
     return (
         <div className="container px-5">
             { !genCode ?
@@ -287,7 +297,13 @@ function Form() {
                                 <p className="card-text">Verification code is sent to your email</p>
                                 <div className="row justify-content-center">
                                     <div className="col-sm-4">
-                                        <input className="form-control form-control-lg" type="number" onChange={(e) => setCheckverification(e.target.value)} value={verification} maxLength="4" required/>
+                                        <input 
+                                            className="form-control form-control-lg" 
+                                            type="number" 
+                                            onChange={(e) => setCheckverification(e.target.value)} 
+                                            value={verification}  
+                                            pattern="\d{4}"
+                                            maxLength="4" required/>
                                     </div>
                                     <div className="text-danger">{message}</div>
                                 </div>

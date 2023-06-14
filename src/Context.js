@@ -244,14 +244,15 @@ const AppProvider = ({ children }) => {
             'token': process.env.REACT_APP_TOKEN, 
             'Content-Type': 'application/json'
           };
-          console.log(userResponse.length)
+          //console.log(userResponse.length)
         axios.post(`${host}api/quiz/process/`,data, {headers: headers})
         .then(function (response) {
-          console.log(response.data);
+          //console.log(response.data);
           setFinalSection(true)
           localStorage.clear();
         })
         .catch(function (error) {
+          alert("Sorry something went wrong, try again later.")
           console.log(error.response);
         });
         

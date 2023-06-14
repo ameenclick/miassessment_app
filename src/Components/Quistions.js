@@ -12,7 +12,6 @@ function Quistions() {
 
     useEffect(() => {
          if(!code || localStorage.getItem("user") == null){
-            console.log(code)
             navigate('/')
          }
        if(finalSection){  
