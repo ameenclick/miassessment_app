@@ -113,7 +113,7 @@ const AppProvider = ({ children }) => {
           else if(response.data === "Registered"){
             //Help avoid registeration
             setVerfied(true)
-            setNextSection(true)
+            //setNextSection(true)
           }
           else{
             setError(true)

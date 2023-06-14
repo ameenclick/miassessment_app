@@ -14,7 +14,7 @@ function Home() {
         else if(done){
             navigate('/final')  
         }
-    })
+    },)
 
     return (
         <div className="tags">
