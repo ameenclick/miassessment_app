@@ -77,8 +77,9 @@ const AppProvider = ({ children }) => {
       }
     }, [code])
 
+    //Fetch the questions based on age limit when state is active
     useEffect(() => {
-        if(forms.age)
+        if(forms.age && !questions)
         {
           if(forms.age < 13)
           {
@@ -113,14 +114,14 @@ const AppProvider = ({ children }) => {
           else if(response.data === "Registered"){
             //Help avoid registeration
             setVerfied(true)
-            setNextSection(true)
+            //setNextSection(true)
           }
           else{
             setError(true)
           }
         } catch(error){
-          setError(true)
-          console.log(error.response.data)
+          alert(error.message+ ", Check your internet!.")
+          console.log(error)
         }
     };
     const codeSubmit = async (e) => {
@@ -143,6 +144,7 @@ const AppProvider = ({ children }) => {
             setQuestions(data);
         }catch(error){
           console.log(error.message)
+          alert(error.message)
         }
     };
 
@@ -270,7 +272,8 @@ const AppProvider = ({ children }) => {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    const postForm = async () =>{
+    //User registration
+    const handleSubmit = async () =>{
         var details = JSON.stringify({
             "userCode": code,
             "name": `${await capitalizeFirstLetter(forms.firstname)} ${await capitalizeFirstLetter(forms.lastname)}`,
@@ -298,7 +301,9 @@ const AppProvider = ({ children }) => {
             await axios.post(url, details,{ headers: headers})
             setModelSection(true)
           } catch(error){
+            alert(error.message+", Check your internet!.")
             console.log(error.response)
+            return false
           }
     }
 
@@ -306,9 +311,9 @@ const AppProvider = ({ children }) => {
 
 
 
-    const handleSubmit = () => {
-       postForm()
-    };
+    // const handleSubmit = () => {
+    //    await postForm()
+    // };
 
     return (
         <AppContext.Provider

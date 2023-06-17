@@ -17,7 +17,7 @@ function Quistions() {
        if(finalSection){  
             navigate('/final')    
        }
-    })
+    },[])
     
     const emptyAlert = () => {
         return alert("Make a choose!")
@@ -73,8 +73,10 @@ function Quistions() {
                 </div>
             </div>
         :
+        <div className="d-flex justify-content-center">
         <div className="spinner-border p-5" role="status">
             <span className="visually-hidden">Loading...</span>
+        </div>
         </div>
     );
 }

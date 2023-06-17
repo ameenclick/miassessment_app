@@ -46,6 +46,7 @@ function Form() {
 
     //Making API call to create and send a otp to verfy email
     async function EmailVerification(email, userName){
+        try{
         const response = await axios.post(host+"api/verify/user", {email: email, name: userName}, { headers :{
             token: process.env.REACT_APP_TOKEN
         }});
@@ -53,6 +54,11 @@ function Form() {
         else{
             setMessage("Something went wrong ,Try gain...");
             setVerfied(false);
+        }
+        }
+        catch(err){
+            alert(err.message)
+            return false
         }
     }
 
@@ -68,8 +74,16 @@ function Form() {
         }
         else
         {
-            navigate("/quiz");
+            if(navigator.onLine)
+            {
+                navigate("/quiz");
+            }
+            else
+            {
+                alert("Check your internet connection!..")
+            }
         }  
+
     }
 
     //Funtion to make failed changes in UI if wrong OTP is entered
