@@ -50,7 +50,7 @@ function Form() {
         const response = await axios.post(host+"api/verify/user", {email: email, name: userName}, { headers :{
             token: process.env.REACT_APP_TOKEN
         }});
-        if(response.status == 200) return response.data.verificationCode
+        if(response.status === 200) return response.data.verificationCode
         else{
             setMessage("Something went wrong ,Try gain...");
             setVerfied(false);

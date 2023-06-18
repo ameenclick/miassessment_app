@@ -79,7 +79,7 @@ const AppProvider = ({ children }) => {
 
     //Fetch the questions based on age limit when state is active
     useEffect(() => {
-        if(forms.age && !questions)
+        if(forms.age)
         {
           if(forms.age < 13)
           {
@@ -114,7 +114,7 @@ const AppProvider = ({ children }) => {
           else if(response.data === "Registered"){
             //Help avoid registeration
             setVerfied(true)
-            //setNextSection(true)
+            setNextSection(true)
           }
           else{
             setError(true)
