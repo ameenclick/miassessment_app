@@ -6,18 +6,24 @@ import { GrChapterNext,GrChapterPrevious } from "react-icons/gr";
 
 
 function Quistions() {
-    const {questions,code,index, nextQuestion,previousQuestion,ansrSub1,optimizedSubmit,isActive,finalSection,answers} = useGlobalContext()
+    const {questions,index, nextQuestion,previousQuestion,ansrSub1,optimizedSubmit,isActive,done,answers,page} = useGlobalContext()
     
     const navigate = useNavigate()
 
     useEffect(() => {
-         if(!code || localStorage.getItem("user") == null){
-            navigate('/')
-         }
-       if(finalSection){  
-            navigate('/final')    
-       }
-    },[])
+        if(page.register)
+        {
+            navigate("/registration");
+        }
+        else if(page.final)
+        {
+            navigate("/report");
+        }
+        else if(!page.quiz)
+        {
+            navigate("/");
+        }
+    }, [page])
     
     const emptyAlert = () => {
         return alert("Make a choose!")
@@ -45,8 +51,14 @@ function Quistions() {
                     { answers.length === questions.length?
                     <div className="row justify-content-center">
                         <div className="col-4" align="center">
-                        <button className='btn btn-success my-3'  onClick={optimizedSubmit}>
-                            Submit
+                        <button className='btn btn-success my-3 text-center'  onClick={optimizedSubmit} disabled={done}>
+                            {
+                                done?
+                                <div className="spinner-border" role="status">
+                                    <span className="sr-only"></span>
+                                </div>
+                                :"Submit"
+                            }
                         </button>
                         </div>
                     </div>

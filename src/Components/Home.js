@@ -3,18 +3,24 @@ import { useGlobalContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-    const {done,code,setCode,error,codeSubmit,nextSection} = useGlobalContext()
+    const {code,setCode,error,codeSubmit, page} = useGlobalContext()
     
     const navigate = useNavigate();
 
-    useEffect(() =>{
-        if(nextSection){
-            navigate('/registration')  
+    useEffect(() => {
+        if(page.register)
+        {
+            navigate("/registration");
         }
-        else if(done){
-            navigate('/final')  
+        else if(page.quiz)
+        {
+            navigate("/quiz");
         }
-    },)
+        else if(page.final)
+        {
+            navigate("/report");
+        }
+    }, [page])
 
     return (
         <div className="tags">
