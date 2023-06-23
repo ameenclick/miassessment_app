@@ -6,7 +6,7 @@ import { GrRevert } from "react-icons/gr";
 import axios from "axios";
 
 function Form() {  
-    const { forms,code,handleChange,handleSubmit,verified, setVerfied,host } = useGlobalContext();
+    const { forms,code,handleChange,handleSubmit,verified, setVerfied,host, page, setPage } = useGlobalContext();
     const navigate = useNavigate()
     const [genCode, setNewCode]= useState(undefined);
     const [verification, setCheckverification] = useState("");
@@ -16,7 +16,7 @@ function Form() {
     useEffect(() => {
          //If no code then go back to home
         if(code === ""){
-          navigate("/");
+          setPage({}); // Navigatin
         }
         //API to access the contry codes for telephone number
         axios.get("https://miassessment.s3.ap-south-1.amazonaws.com/static/allcontrytel.json")
@@ -25,12 +25,17 @@ function Form() {
         })
       },[])
 
+    //Navigate when page state changes
     useEffect(() => {
-        if(localStorage.getItem('user')!= null && verified)
+        if(page.quiz && localStorage.getItem('user')!= null)
         {
             navigate("/quiz");
         }
-    }, [verified])
+        else if(!page)
+        {
+            navigate("/");
+        }
+    }, [page])
 
     //Checking the verification code to proceed when ever value changes
     useEffect(() => {
@@ -38,8 +43,8 @@ function Form() {
         {
             console.log("Email Verified")
             setVerfied(true)
-            handleSubmit();
-            navigate("/quiz");
+            handleSubmit(); // Register the user details
+            setPage({"quiz" : true});
         }
         else if(verification.length === 4)  verificationFailed();
     },[verification])
@@ -53,7 +58,7 @@ function Form() {
         if(response.status === 200) return response.data.verificationCode
         else{
             setMessage("Something went wrong ,Try gain...");
-            setVerfied(false);
+            //setVerfied(false);
         }
         }
         catch(err){
@@ -76,7 +81,7 @@ function Form() {
         {
             if(navigator.onLine)
             {
-                navigate("/quiz");
+                setPage({"quiz" :true })
             }
             else
             {
@@ -93,7 +98,7 @@ function Form() {
             return
         }
         setMessage("Incorrect code ,Try gain...");
-        setVerfied(false);
+        //setVerfied(false);
         alert("Verification failed...");
         return
     }
@@ -130,7 +135,7 @@ function Form() {
                     </div>
                     <div className="col-lg-4 p-2">
                         <label className="form-detials">Type</label><span className="text-danger">*</span>
-                        <select className="form-control" name="type" id="type" value={forms.type} onChange={handleChange}>
+                        <select className="form-select" name="type" id="type" defaultValue={forms.type} onChange={handleChange}>
                             <option value="student">Student</option>
                             <option value="employee">Employee </option>
                         </select>
@@ -221,7 +226,7 @@ function Form() {
                 <div className="row">
                     <div className="col-lg-4 p-2">
                         <label className="form-detials">Country</label><span className="text-danger">*</span>
-                        <select className="form-control" name="country" id="country" value={forms.country} onChange={handleChange} required>
+                        <select className="form-select" name="country" id="country" defaultValue={forms.country} onChange={handleChange} required>
                                 {countries.map((item) => {
                                     return (
                                         <option value={item.country} key={item.country}>
@@ -233,7 +238,7 @@ function Form() {
                     </div>
                     <div className="col-lg-4 p-2">
                         <label className="form-detials">Assessment Langauge</label><span className="text-danger">*</span>
-                        <select className="form-control" name="language" id="language" value={forms.language} onChange={handleChange} required>
+                        <select className="form-select" name="language" id="language" defaultValue={forms.language} onChange={handleChange} required>
                             <option value={""} selected>Choose a language</option>
                             <option value="english">English</option>
                             <option value="malayalam">Malayalam</option>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useContext, useEffect, useCallback, useRef } from "react";
+//import { useNavigate } from "react-router-dom";
 
 const AppContext = React.createContext();
 
@@ -8,17 +9,15 @@ const AppProvider = ({ children }) => {
     /*Home*/
     const host = process.env.REACT_APP_HOST
     const [code, setCode] = useState("");
-    const [nextSection,setNextSection] = useState(false)
     const questionsUrl = `${host}api/quiz/`;
-
     /*Quiz*/
     const [questions, setQuestions] = useState([]);
     const [index, setIndex] = useState("");
     const [error, setError] = useState(false);
     const [answers,setAnswers] = useState([])
     const [isActive,setIsActive] = useState("")
-    const [finalSection,setFinalSection] = useState(false)
     const [done, setDone] = useState(false)
+    const [page, setPage] = useState({});
     const [verified, setVerfied] = useState(false);
     const [options, setOptions] = useState({
       id:'',
@@ -79,7 +78,7 @@ const AppProvider = ({ children }) => {
 
     //Fetch the questions based on age limit when state is active
     useEffect(() => {
-        if(forms.age)
+        if(page.quiz && forms.age)
         {
           if(forms.age < 13)
           {
@@ -90,9 +89,7 @@ const AppProvider = ({ children }) => {
               fetchQuestions(`${questionsUrl}${forms.language}/senior`);
           }
         }
-    }, [forms])
-
-    const [modelSection,setModelSection] = useState(false)
+    }, [page])
     
     /* Home*/
     const fetchValid = async (url_1) => {
@@ -104,23 +101,24 @@ const AppProvider = ({ children }) => {
         try{
           const response = await axios(url_1, { headers })
           console.log(response.data)
-          if (response.data === "Valid") {
-              setNextSection(true)
+          if (response.data.status === "Valid") {
+              setPage({"register" : true})
           }
-          else if(response.data === "Done") {
+          else if(response.data.status === "Done") {
           //When a completed user try again will directed to report page
               setDone(true);
+              setPage({"final": true})
           }
-          else if(response.data === "Registered"){
+          else if(response.data.status === "Registered"){
             //Help avoid registeration
-            setVerfied(true)
-            setNextSection(true)
+            setForms(response.data.user); // Setting user data
+            setPage({"quiz": true})
           }
           else{
             setError(true)
           }
         } catch(error){
-          alert(error.message+ ", Check your internet!.")
+          alert(error.message)
           console.log(error)
         }
     };
@@ -219,18 +217,7 @@ const AppProvider = ({ children }) => {
       }
     }, [options])
 
-    //Limit the rate of execution of the funtion
-    const debounce = (func) => {
-      let timer;
-      return function (...args) {
-        const context = this;
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(() => {
-          timer = null;
-          func.apply(context, args);
-        }, 500);
-      };
-    };
+    
 
     //Avoid senting request again when double click
     const submitAnswer = (e)=>{
@@ -249,18 +236,42 @@ const AppProvider = ({ children }) => {
           //console.log(userResponse.length)
         axios.post(`${host}api/quiz/process/`,data, {headers: headers})
         .then(function (response) {
-          //console.log(response.data);
-          setFinalSection(true)
-          localStorage.clear();
+          console.log(response);
+          if(response.status === 200 || response.status === 201)
+          {
+            setPage({ final: true }) //Navigate to next page
+            setDone(false) // Report is generating so it's not done
+          }
+          else
+          {
+            alert("Unable to submit the response due server error!")
+          }
         })
         .catch(function (error) {
-          alert("Sorry something went wrong, try again later.")
+          alert("Sorry something went wrong on server,"+error.response.message)
           console.log(error.response);
         });
         
     }
 
-    const optimizedSubmit = useCallback(debounce(submitAnswer),[])
+    //Limit the rate of execution of the funtion
+    const debounce = (func) => {
+      let timer;
+      return function (...args) {
+        const context = this;
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          timer = null;
+          func.apply(context, args);
+        }, 1000);
+      };
+    };
+
+    const optimizedSubmit = useCallback((...args) => {
+      setDone(true); // Execute setDone(true) before debounce
+      debounce(submitAnswer)(...args);
+    }, []);
+
     /*form*/
     const handleChange = (e) => {
         const name = e.target.name;
@@ -299,7 +310,7 @@ const AppProvider = ({ children }) => {
           
           try{
             await axios.post(url, details,{ headers: headers})
-            setModelSection(true)
+            //setModelSection(true)
           } catch(error){
             alert(error.message+", Check your internet!.")
             console.log(error.response)
@@ -307,17 +318,9 @@ const AppProvider = ({ children }) => {
           }
     }
 
-    
-
-
-
-    // const handleSubmit = () => {
-    //    await postForm()
-    // };
-
     return (
         <AppContext.Provider
-            value={{ code,setCode,setError,codeSubmit,nextSection, questions, index, error, nextQuestion, previousQuestion,ansrSub1,isActive,optimizedSubmit,finalSection,  forms, handleChange, handleSubmit,modelSection, host,done,verified, setVerfied,answers }}
+            value={{ code,setCode,setError,codeSubmit, questions, index, error, nextQuestion, previousQuestion,ansrSub1,isActive,optimizedSubmit,  forms, handleChange, handleSubmit, host,done,verified, setVerfied,answers, page, setPage }}
         >
             {children}
         </AppContext.Provider>
