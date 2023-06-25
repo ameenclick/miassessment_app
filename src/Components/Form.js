@@ -38,12 +38,12 @@ function Form() {
     }, [page])
 
     //Checking the verification code to proceed when ever value changes
-    useEffect(async () => {
+    useEffect(() => {
         if(Number(verification) === genCode)
         {
             console.log("Email Verified")
             setVerfied(true)
-            await handleSubmit(); // Register the user details
+            handleSubmit(); // Register the user details
         }
         else if(verification.length === 4)  verificationFailed();
     },[verification])
