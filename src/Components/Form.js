@@ -38,13 +38,12 @@ function Form() {
     }, [page])
 
     //Checking the verification code to proceed when ever value changes
-    useEffect(() => {
+    useEffect(async () => {
         if(Number(verification) === genCode)
         {
             console.log("Email Verified")
             setVerfied(true)
-            handleSubmit(); // Register the user details
-            setPage({"quiz" : true});
+            await handleSubmit(); // Register the user details
         }
         else if(verification.length === 4)  verificationFailed();
     },[verification])
@@ -182,7 +181,7 @@ function Form() {
                             value={forms.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
-                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                            pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
                             title="Follow pattern: username@mailer.com, You will recive report in email."
                             required/>
                     </div>
@@ -239,7 +238,7 @@ function Form() {
                     <div className="col-lg-4 p-2">
                         <label className="form-detials">Assessment Langauge</label><span className="text-danger">*</span>
                         <select className="form-select" name="language" id="language" defaultValue={forms.language} onChange={handleChange} required>
-                            <option value={""} selected>Choose a language</option>
+                            <option value={""}>Choose a language</option>
                             <option value="english">English</option>
                             <option value="malayalam">Malayalam</option>
                             <option value="malayalam">Kannada</option>
