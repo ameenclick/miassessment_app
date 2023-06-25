@@ -236,7 +236,7 @@ const AppProvider = ({ children }) => {
           //console.log(userResponse.length)
         axios.post(`${host}api/quiz/process/`,data, {headers: headers})
         .then(function (response) {
-          console.log(response);
+          //console.log(response);
           if(response.status === 200 || response.status === 201)
           {
             setPage({ final: true }) //Navigate to next page
@@ -244,12 +244,12 @@ const AppProvider = ({ children }) => {
           }
           else
           {
-            alert("Unable to submit the response due server error!")
+            alert(response.statusText)
           }
         })
         .catch(function (error) {
-          alert("Sorry something went wrong on server,"+error.response.message)
-          console.log(error.response);
+          alert("Failer server communication, "+error.message)
+          console.log(error.message);
         });
         
     }
@@ -309,10 +309,20 @@ const AppProvider = ({ children }) => {
             }
           
           try{
-            await axios.post(url, details,{ headers: headers})
-            //setModelSection(true)
+            var response = await axios.post(url, details,{ headers: headers})
+            console.log(response)
+            if(response.status === 200)
+            {
+              setPage({"quiz" : true});
+            }
+            else
+            {
+              alert(response.statusText)
+              console.log(response.statusText)
+              return false
+            }
           } catch(error){
-            alert(error.message+", Check your internet!.")
+            alert(error.statusText)
             console.log(error.response)
             return false
           }
