@@ -18,7 +18,7 @@ const AppProvider = ({ children }) => {
     const [isActive,setIsActive] = useState("")
     const [done, setDone] = useState(false)
     const [page, setPage] = useState({});
-    const [verified, setVerfied] = useState(false);
+    const [verified, setVerfied] = useState(true);
     const [options, setOptions] = useState({
       id:'',
       choice:''
@@ -70,6 +70,7 @@ const AppProvider = ({ children }) => {
 
   //Code set for reference
     useEffect(() => {
+      console.log(code)
       if(code)
       {
         codeRef.current=code
@@ -78,6 +79,7 @@ const AppProvider = ({ children }) => {
 
     //Fetch the questions based on age limit when state is active
     useEffect(() => {
+        console.log(page)
         if(page.quiz && forms.age)
         {
           if(forms.age < 13)
@@ -284,10 +286,11 @@ const AppProvider = ({ children }) => {
     }
 
     //User registration
-    const handleSubmit = async () =>{
+    const handleSubmit = (e) =>{
+        e.preventDefault();
         var details = JSON.stringify({
             "userCode": code,
-            "name": `${await capitalizeFirstLetter(forms.firstname)} ${await capitalizeFirstLetter(forms.lastname)}`,
+            "name": `${capitalizeFirstLetter(forms.firstname)} ${capitalizeFirstLetter(forms.lastname)}`,
             "type": capitalizeFirstLetter(forms.type),
             "organisation": capitalizeFirstLetter(forms.organization),
             "level": forms.level,
@@ -307,25 +310,26 @@ const AppProvider = ({ children }) => {
               'token': process.env.REACT_APP_TOKEN, 
               'Content-Type': 'application/json'
             }
-          
-          try{
-            var response = await axios.post(url, details,{ headers: headers})
-            console.log(response)
-            if(response.status === 200)
-            {
-              setPage({"quiz" : true});
-            }
-            else
-            {
-              alert(response.statusText)
-              console.log(response.statusText)
-              return false
-            }
-          } catch(error){
-            alert(error.statusText)
+           
+            axios.post(url, details,{ headers: headers})
+            .then((response) => {
+                if(response.status === 200)
+                {
+                  setPage({"quiz" : true});
+                }
+                else
+                {
+                  alert(response.statusText)
+                  console.log(response.statusText)
+                  return false
+                }
+              }
+            )
+            .catch((error) => {
+            alert("Server : "+error.response.statusText)
             console.log(error.response)
             return false
-          }
+            })
     }
 
     return (

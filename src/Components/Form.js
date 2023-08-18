@@ -2,21 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useGlobalContext } from "../Context";
 import { useNavigate } from "react-router-dom";
 import { countries } from "../Constants/Country";
-import { GrRevert } from "react-icons/gr";
+//import { GrRevert } from "react-icons/gr";
 import axios from "axios";
 
 function Form() {  
-    const { forms,code,handleChange,handleSubmit,verified, setVerfied,host, page, setPage } = useGlobalContext();
+    const { forms,code,
+        handleChange,handleSubmit,
+        // verified, setVerfied,host, 
+        page, setPage } = useGlobalContext();
     const navigate = useNavigate()
-    const [genCode, setNewCode]= useState(undefined);
-    const [verification, setCheckverification] = useState("");
-    const [message, setMessage] = useState("")
+    // const [genCode, setNewCode]= useState(undefined);
+    // const [verification, setCheckverification] = useState("");
+    // const [message, setMessage] = useState("")
     const [countrycode, setCountryCode]=useState([])
 
     useEffect(() => {
          //If no code then go back to home
         if(code === ""){
           setPage({}); // Navigatin
+          navigate("/");
         }
         //API to access the contry codes for telephone number
         axios.get("https://miassessment.s3.ap-south-1.amazonaws.com/static/allcontrytel.json")
@@ -27,85 +31,115 @@ function Form() {
 
     //Navigate when page state changes
     useEffect(() => {
-        if(page.quiz && localStorage.getItem('user')!= null)
+        //console.log(page.quiz,localStorage.getItem('user'))
+        if(page.quiz && code)
         {
             navigate("/quiz");
         }
-        else if(!page)
-        {
-            navigate("/");
-        }
+        // else if(!page)
+        // {
+        //     navigate("/");
+        // }
     }, [page])
 
     //Checking the verification code to proceed when ever value changes
-    useEffect(() => {
-        if(Number(verification) === genCode)
-        {
-            console.log("Email Verified")
-            setVerfied(true)
-            handleSubmit(); // Register the user details
-        }
-        else if(verification.length === 4)  verificationFailed();
-    },[verification])
+    // useEffect(() => {
+    //     if(Number(verification) === genCode)
+    //     {
+    //         console.log("Email Verified")
+    //         setVerfied(true)
+    //         handleSubmit(); // Register the user details
+    //     }
+    //     else if(verification.length === 4)  verificationFailed();
+    // },[verification])
 
     //Making API call to create and send a otp to verfy email
-    async function EmailVerification(email, userName){
-        try{
-        const response = await axios.post(host+"api/verify/user", {email: email, name: userName}, { headers :{
-            token: process.env.REACT_APP_TOKEN
-        }});
-        if(response.status === 200) return response.data.verificationCode
-        else{
-            setMessage("Something went wrong ,Try gain...");
-            //setVerfied(false);
-        }
-        }
-        catch(err){
-            alert(err.message)
-            return false
-        }
-    }
+    // async function EmailVerification(email, userName){
+    //     try{
+    //     const response = await axios.post(host+"api/verify/user", {email: email, name: userName}, { headers :{
+    //         token: process.env.REACT_APP_TOKEN
+    //     }});
+    //     if(response.status === 200) return response.data.verificationCode
+    //     else{
+    //         setMessage("Something went wrong ,Try gain...");
+    //         //setVerfied(false);
+    //     }
+    //     }
+    //     catch(err){
+    //         alert(err.message)
+    //         return false
+    //     }
+    // }
 
-    //Verifying email based on user input otp recived with server created
-    const verifyEmail = async (e) => {
-        e.preventDefault();
-        localStorage.setItem("user",JSON.stringify(forms));
-        if(!verified)
-        {
-            const verificationCode = await EmailVerification(forms.email,forms.firstname)
-            if(verificationCode) setNewCode(verificationCode)
-            else verificationFailed()
-        }
-        else
-        {
-            if(navigator.onLine)
-            {
-                setPage({"quiz" :true })
-            }
-            else
-            {
-                alert("Check your internet connection!..")
-            }
-        }  
+    // //Verifying email based on user input otp recived with server created
+    // const verifyEmail = async (e) => {
+    //     e.preventDefault();
+    //     localStorage.setItem("user",JSON.stringify(forms));
+    //     if(!verified)
+    //     {
+    //         const verificationCode = await EmailVerification(forms.email,forms.firstname)
+    //         if(verificationCode) setNewCode(verificationCode)
+    //         else verificationFailed()
+    //     }
+    //     else
+    //     {
+    //         if(navigator.onLine)
+    //         {
+    //             setPage({"quiz" :true })
+    //         }
+    //         else
+    //         {
+    //             alert("Check your internet connection!..")
+    //         }
+    //     }  
 
-    }
+    // }
 
-    //Funtion to make failed changes in UI if wrong OTP is entered
-    const verificationFailed = () => {
-        if(!forms.gender){
-            alert("Choose a gender");
-            return
-        }
-        setMessage("Incorrect code ,Try gain...");
-        //setVerfied(false);
-        alert("Verification failed...");
-        return
-    }
+    // //Funtion to make failed changes in UI if wrong OTP is entered
+    // const verificationFailed = () => {
+    //     if(!forms.gender){
+    //         alert("Choose a gender");
+    //         return
+    //     }
+    //     setMessage("Incorrect code ,Try gain...");
+    //     //setVerfied(false);
+    //     alert("Verification failed...");
+    //     return
+    // }
     
     return (
         <div className="container px-5">
-            { !genCode ?
-                <form onSubmit={verifyEmail}>
+            {//  !genCode ?
+            //     :
+            //     <form className="row justify-content-center text-center needs-validation">
+            //         <div className="col-lg-6 align-self-center">
+            //             <div className="card m-5 p-2 justify-content-center w3-animate-right">
+            //                 <div className="card-header">
+            //                     <h2><span onClick={() => setNewCode("")}>
+            //                       <GrRevert />
+            //                     </span>  Email Verification</h2>
+            //                 </div>
+            //                 <div className="card-body">
+            //                     <h3 className="card-title">Enter verification code</h3>
+            //                     <p className="card-text">Verification code is sent to your email</p>
+            //                     <div className="row justify-content-center">
+            //                         <div className="col-sm-4">
+            //                             <input 
+            //                                 className="form-control form-control-lg" 
+            //                                 type="number" 
+            //                                 onChange={(e) => setCheckverification(e.target.value)} 
+            //                                 value={verification}  
+            //                                 pattern="\d{4}"
+            //                                 maxLength="4" required/>
+            //                         </div>
+            //                         <div className="text-danger">{message}</div>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //         </div>
+            //     </form>
+            }
+            <form onSubmit={handleSubmit}>
                 <h2 className="form-title">Registration</h2>
                 <div className="row">
                     <div className="col-lg-4 p-2">
@@ -300,39 +334,8 @@ function Form() {
                         <button className="btn btn-primary float-end px-5" type="submit">Submit</button>
                     </div>
                 </div>
-                </form>
-                :
-                <form className="row justify-content-center text-center needs-validation">
-                    <div className="col-lg-6 align-self-center">
-                        <div className="card m-5 p-2 justify-content-center w3-animate-right">
-                            <div className="card-header">
-                                <h2><span onClick={() => setNewCode("")}>
-                                  <GrRevert />
-                                </span>  Email Verification</h2>
-                            </div>
-                            <div className="card-body">
-                                <h3 className="card-title">Enter verification code</h3>
-                                <p className="card-text">Verification code is sent to your email</p>
-                                <div className="row justify-content-center">
-                                    <div className="col-sm-4">
-                                        <input 
-                                            className="form-control form-control-lg" 
-                                            type="number" 
-                                            onChange={(e) => setCheckverification(e.target.value)} 
-                                            value={verification}  
-                                            pattern="\d{4}"
-                                            maxLength="4" required/>
-                                    </div>
-                                    <div className="text-danger">{message}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            }
-            
-        </div>
-        
+            </form>
+        </div>     
     );
 }
 

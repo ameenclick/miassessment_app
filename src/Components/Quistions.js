@@ -6,20 +6,13 @@ import { GrChapterNext,GrChapterPrevious } from "react-icons/gr";
 
 
 function Quistions() {
-    const {questions,index, nextQuestion,previousQuestion,ansrSub1,optimizedSubmit,isActive,done,answers,page} = useGlobalContext()
+    const {questions,index, nextQuestion,previousQuestion,ansrSub1,optimizedSubmit,isActive,done,answers,page, code} = useGlobalContext()
     
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(page.register)
-        {
-            navigate("/registration");
-        }
-        else if(page.final)
-        {
-            navigate("/report");
-        }
-        else if(!page.quiz)
+        //console.log(page)
+        if(!page.quiz || !code)
         {
             navigate("/");
         }
