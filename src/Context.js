@@ -104,14 +104,14 @@ const AppProvider = ({ children }) => {
         try{
           const response = await axios(url_1, { headers })
           console.log(response.data)
-          if (response.data === "Valid") {
-              setNextSection(true)
+          if (response.data.status === "Valid") {
+              setNextSection(true);
           }
-          else if(response.data === "Done") {
+          else if(response.data.status === "Done") {
           //When a completed user try again will directed to report page
               setDone(true);
           }
-          else if(response.data === "Registered"){
+          else if(response.data.status === "Registered"){
             //Help avoid registeration
             setVerfied(true)
             setNextSection(true)
@@ -260,7 +260,11 @@ const AppProvider = ({ children }) => {
         
     }
 
-    const optimizedSubmit = useCallback(debounce(submitAnswer),[])
+    const optimizedSubmit = useCallback((...args) => {
+      setDone(true); // Execute setDone(true) before debounce
+      debounce(submitAnswer)(...args);
+    }, []);
+    
     /*form*/
     const handleChange = (e) => {
         const name = e.target.name;

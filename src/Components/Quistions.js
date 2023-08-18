@@ -6,7 +6,7 @@ import { GrChapterNext,GrChapterPrevious } from "react-icons/gr";
 
 
 function Quistions() {
-    const {questions,code,index, nextQuestion,previousQuestion,ansrSub1,optimizedSubmit,isActive,finalSection,answers} = useGlobalContext()
+    const {questions,code,index, nextQuestion,previousQuestion,ansrSub1,optimizedSubmit,isActive,finalSection,answers,done} = useGlobalContext()
     
     const navigate = useNavigate()
 
@@ -18,6 +18,13 @@ function Quistions() {
             navigate('/final')    
        }
     },[])
+
+    //Move to next final page when value change
+    useEffect(() => {
+      if(finalSection){  
+           navigate('/final')    
+      }
+   },[finalSection])
     
     const emptyAlert = () => {
         return alert("Make a choose!")
@@ -45,8 +52,15 @@ function Quistions() {
                     { answers.length === questions.length?
                     <div className="row justify-content-center">
                         <div className="col-4" align="center">
-                        <button className='btn btn-success my-3'  onClick={optimizedSubmit}>
-                            Submit
+                        <button className='btn btn-success my-3'  onClick={optimizedSubmit} disabled={finalSection}>
+                           {done? 
+                           <div className="d-flex justify-content-center">
+                           <div className="spinner-border" role="status">
+                               <span className="visually-hidden">Loading...</span>
+                           </div>
+                           </div>
+                           : 
+                           "Submit"} 
                         </button>
                         </div>
                     </div>
